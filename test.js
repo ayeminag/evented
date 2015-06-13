@@ -1,11 +1,15 @@
 var EventModel = require('./eventmodel');
-var __extends = function(child, parent) {
-  for(property in parent) {
-    child[property] = parent[property];
+
+Function.prototype.extends = function(parent) {
+  if(parent.constructor === Function) {
+    this.prototype = new parent;
+    this.prototype.parent = parent.prototype;
+  } else {
+    this.prototype = parent;
+    this.prototype.parent = parent;
   }
-  child.prototype = new parent();
-  child.prototype.constructor = child;
-  return child;
+  this.prototype.constructor = this;
+  return this;
 }
 
 var Evented = function(name, age) {
@@ -13,7 +17,7 @@ var Evented = function(name, age) {
   this.age = age;
 }
 
-var Evented = __extends(Evented, EventModel);
+var Evented = Evented.extends(EventModel);
 var evented = new Evented("devine", "age");
 
 evented.on('changename', function(name){
